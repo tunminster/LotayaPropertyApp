@@ -17,6 +17,7 @@ namespace LotayaPropertyApp.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
-        public Android.Graphics.Bitmap Image1 { get; set; }        
+        public Android.Graphics.Bitmap Image1 { get; set; }  
+        public string Image2 { get; set; }
     }
 }

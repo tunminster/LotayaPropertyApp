@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 using Android.App;
 using Android.Content;
-using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using LotayaPropertyApp.Models;
+using Android.Graphics;
 using Square.Picasso;
 
-namespace LotayaPropertyApp.Models
+namespace LotayaPropertyApp.Adapters
 {
     public class CustomAdapter : ArrayAdapter
     {
@@ -48,12 +48,12 @@ namespace LotayaPropertyApp.Models
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            if(inflater == null)
+            if (inflater == null)
             {
                 inflater = (LayoutInflater)_context.GetSystemService(Context.LayoutInflaterService);
             }
 
-            if(convertView == null)
+            if (convertView == null)
             {
                 convertView = inflater.Inflate(resource, parent, false);
             }
@@ -61,7 +61,11 @@ namespace LotayaPropertyApp.Models
             // bind data
             MyHolder holder = new MyHolder(convertView);
             holder.txtTitle.Text = propertyFeeds[position].Title;
-            //holder.ivImage.SetImageBitmap(propertyFeeds[position].Image1);
+            holder.ivImage.SetImageBitmap(propertyFeeds[position].Image1);
+
+
+
+            //ImageService.Instance.LoadUrl(propertyFeeds[position].Image2).Into(holder.ivImage);
 
             Picasso.With(Context).Load(propertyFeeds[position].Image2).Into(holder.ivImage);
 
