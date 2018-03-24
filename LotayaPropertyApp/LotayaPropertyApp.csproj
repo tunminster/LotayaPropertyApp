@@ -76,8 +76,6 @@
     <Compile Include="Holders\PropertyFeedHolder.cs" />
     <Compile Include="HomeActivity.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Models\CustomAdapter.cs" />
-    <Compile Include="Models\MyHolder.cs" />
     <Compile Include="Models\PropertyFeedModel.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

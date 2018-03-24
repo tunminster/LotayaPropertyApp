@@ -12,6 +12,7 @@ using Android.Widget;
 using LotayaPropertyApp.Models;
 using Android.Graphics;
 using Square.Picasso;
+using LotayaPropertyApp.Holders;
 
 namespace LotayaPropertyApp.Adapters
 {
@@ -59,15 +60,15 @@ namespace LotayaPropertyApp.Adapters
             }
 
             // bind data
-            MyHolder holder = new MyHolder(convertView);
+            PropertyFeedHolder holder = new PropertyFeedHolder(convertView);
             holder.txtTitle.Text = propertyFeeds[position].Title;
-            holder.ivImage.SetImageBitmap(propertyFeeds[position].Image1);
+            //holder.ivImage.SetImageBitmap(propertyFeeds[position].Image1);
 
 
 
             //ImageService.Instance.LoadUrl(propertyFeeds[position].Image2).Into(holder.ivImage);
 
-            Picasso.With(Context).Load(propertyFeeds[position].Image2).Into(holder.ivImage);
+            Picasso.With(Context).Load(propertyFeeds[position].Image1).Into(holder.ivImage);
 
             convertView.SetBackgroundColor(Color.AliceBlue);
 
