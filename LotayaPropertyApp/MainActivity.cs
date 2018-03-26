@@ -13,6 +13,9 @@ using SQLite;
 using LotayaPropertyApp.Database.Models;
 using Newtonsoft.Json;
 using LotayaPropertyApp.Database;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace LotayaPropertyApp
 {
@@ -46,7 +49,11 @@ namespace LotayaPropertyApp
 
             lv.ItemClick += lv_ItemClick;
 
-            
+            AppCenter.Start("9e333419-7601-418f-b781-ecaebcbeaed9",
+                   typeof(Analytics), typeof(Crashes));
+            AppCenter.Start("9e333419-7601-418f-b781-ecaebcbeaed9", typeof(Analytics), typeof(Crashes));
+
+
         }
 
         private void lv_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
