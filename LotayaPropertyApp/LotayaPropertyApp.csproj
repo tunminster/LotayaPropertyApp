@@ -115,6 +115,7 @@
     <Compile Include="Adapters\CustomAdapter.cs" />
     <Compile Include="Database\AppDbContext.cs" />
     <Compile Include="Database\Models\TokenModel.cs" />
+    <Compile Include="Helpers\ConfigHelper.cs" />
     <Compile Include="Holders\PropertyFeedHolder.cs" />
     <Compile Include="HomeActivity.cs" />
     <Compile Include="MainActivity.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Services\LotayaApiService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="Assets\ZawgyiOne2008.ttf" />
     <None Include="GettingStarted.Xamarin" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
@@ -141,13 +143,24 @@
     </AndroidResource>
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\drawable\" />
-    <Folder Include="Resources\mipmap-hdpi\" />
-    <Folder Include="Resources\mipmap-mdpi\" />
-    <Folder Include="Resources\mipmap-xhdpi\" />
-    <Folder Include="Resources\mipmap-xxhdpi\" />
-    <Folder Include="Resources\mipmap-xxxhdpi\" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_launcher.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

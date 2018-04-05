@@ -13,6 +13,7 @@ using LotayaPropertyApp.Models;
 using Android.Graphics;
 using Square.Picasso;
 using LotayaPropertyApp.Holders;
+using static Android.InputMethodServices.InputMethodService;
 
 namespace LotayaPropertyApp.Adapters
 {
@@ -61,6 +62,9 @@ namespace LotayaPropertyApp.Adapters
 
             // bind data
             PropertyFeedHolder holder = new PropertyFeedHolder(convertView);
+            var font = Typeface.CreateFromAsset(Context.Assets, "ZawgyiOne2008.ttf");
+            holder.txtTitle.Typeface = font;
+
             holder.txtTitle.Text = propertyFeeds[position].Title;
             //holder.ivImage.SetImageBitmap(propertyFeeds[position].Image1);
 

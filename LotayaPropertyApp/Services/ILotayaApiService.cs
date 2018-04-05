@@ -5,6 +5,6 @@ namespace LotayaPropertyApp.Services
 {
     public interface ILotayaApiService
     {
-        List<PropertyFeedModel> GetPropertyFeedList();
+        List<PropertyFeedModel> GetPropertyFeedList(string token);
     }
 }

@@ -35,6 +35,16 @@ namespace LotayaPropertyApp.Database
             return db.DeleteAll<T>();
         }
 
+        public int Update<T>(T model)
+        {
+            return db.Update(model);
+        }
+
+        public TableQuery<T> GetList<T>() where T: new()
+        {
+            return db.Table<T>();
+        }
+
 
         private string CreateDatabase(string path)
         {
