@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\CustomAdapter.cs" />
+    <Compile Include="Adapters\CustomScrollListener.cs" />
     <Compile Include="Database\AppDbContext.cs" />
     <Compile Include="Database\Models\TokenModel.cs" />
     <Compile Include="Helpers\ConfigHelper.cs" />

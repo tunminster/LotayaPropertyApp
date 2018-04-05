@@ -19,6 +19,7 @@ using Microsoft.AppCenter.Crashes;
 using System.IO;
 using LotayaPropertyApp.Services;
 using LotayaPropertyApp.Helpers;
+using System.Linq;
 
 namespace LotayaPropertyApp
 {
@@ -30,6 +31,7 @@ namespace LotayaPropertyApp
         private List<PropertyFeedModel> propertyFeedModels;
         private AppDbContext _db;
         private ILotayaApiService _lotayaApiService;
+        private int maxPosition;
 
         public MainActivity()
         {
@@ -48,9 +50,18 @@ namespace LotayaPropertyApp
 
             propertyFeedModels = GetPropertyFeedModels();
 
+            maxPosition = propertyFeedModels.Count;
+
+            Button btnLoadMore = new Button(this);
+            btnLoadMore.Text = "Load More";
+            btnLoadMore.Click += BtnLoadMore_Click;
+            lv.AddFooterView(btnLoadMore);
+
+
             adapter = new CustomAdapter(this, Resource.Layout.PropertyFeedModel, Resource.Id.tvTitle2, propertyFeedModels);
 
             lv.Adapter = adapter;
+
 
             lv.ItemClick += lv_ItemClick;
 
@@ -59,6 +70,16 @@ namespace LotayaPropertyApp
             AppCenter.Start("9e333419-7601-418f-b781-ecaebcbeaed9", typeof(Analytics), typeof(Crashes));
 
 
+        }
+
+        private void BtnLoadMore_Click(object sender, EventArgs e)
+        {
+            RunOnUiThread(() =>
+            {
+                var result = propertyFeedModels.Skip(maxPosition).Take(maxPosition + 20).ToList();
+                adapter = new CustomAdapter(this, Resource.Layout.PropertyFeedModel, Resource.Id.tvTitle2, result);
+                lv.Adapter = adapter;
+            });
         }
 
         private void lv_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
