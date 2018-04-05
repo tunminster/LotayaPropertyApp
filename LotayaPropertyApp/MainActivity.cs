@@ -50,7 +50,8 @@ namespace LotayaPropertyApp
 
             propertyFeedModels = GetPropertyFeedModels();
 
-            maxPosition = propertyFeedModels.Count;
+            //maxPosition = propertyFeedModels.Count;
+            maxPosition = 20;
 
             Button btnLoadMore = new Button(this);
             btnLoadMore.Text = "Load More";
@@ -76,10 +77,18 @@ namespace LotayaPropertyApp
         {
             RunOnUiThread(() =>
             {
-                var result = propertyFeedModels.Skip(maxPosition).Take(maxPosition + 20).ToList();
-                adapter = new CustomAdapter(this, Resource.Layout.PropertyFeedModel, Resource.Id.tvTitle2, result);
+                var result = GetPropertyFeedModels(maxPosition,20);
+                propertyFeedModels.AddRange(result);
+                adapter = new CustomAdapter(this, Resource.Layout.PropertyFeedModel, Resource.Id.tvTitle2, propertyFeedModels);
                 lv.Adapter = adapter;
+
+                int currentPosition = lv.FirstVisiblePosition;
+                lv.SetSelectionFromTop(currentPosition + 1, 0);
+                lv.SetSelection(maxPosition);
+
             });
+
+            maxPosition = propertyFeedModels.Count;
         }
 
         private void lv_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
@@ -87,35 +96,29 @@ namespace LotayaPropertyApp
             Toast.MakeText(this, propertyFeedModels[e.Position].Title, ToastLength.Short).Show();
         }
 
+        //Todo: get property by skip and take
+        private List<PropertyFeedModel> GetPropertyFeedModels(int skip, int take)
+        {
+            TokenModel result = GetToken();
+            return new List<PropertyFeedModel>();
+        }
+
+
         private List<PropertyFeedModel> GetPropertyFeedModels()
         {
-            
-            //string dbPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "lotayaApp.db3");
-            //var db = new SQLiteConnection(dbPath);
-            
-            //var data = db.Table<TokenModel>();
+            TokenModel result = GetToken();
 
+            var propertyList = _lotayaApiService.GetPropertyFeedList(result.access_token);
+            return propertyList;
+
+        }
+
+        private TokenModel GetToken()
+        {
             var data = _db.GetList<TokenModel>();
-
             var result = data.FirstOrDefault();
 
-            //if (result != null && result.expires > DateTime.Now)
-            //{
-            //    //var propertyList = _lotayaApiService.GetPropertyFeedList(result.access_token);
-            //    //return propertyList;
-            //}
-            //else
-            //{
-            //    var token = GetToken("http://lotayaapi.harveynetwork.com/", "tminhein@gmail.com", "lotayaproperty");
-            //    TokenModel tokenModel;
-
-            //    tokenModel = JsonConvert.DeserializeObject<TokenModel>(token);
-            //    //var data = db.Table<TokenModel>();
-            //    _db.DeleteModel<TokenModel>();
-            //    _db.Insert(tokenModel);
-            //}
-
-            if(result == null || result.expires < DateTime.Now || result.expires.Equals(DateTime.Now))
+            if (result == null || result.expires < DateTime.Now || result.expires.Equals(DateTime.Now))
             {
                 var token = GetToken(ConfigHelper.LotayaApiUrl, ConfigHelper.ApiUsername, ConfigHelper.ApiPassword);
                 TokenModel tokenModel;
@@ -128,31 +131,7 @@ namespace LotayaPropertyApp
                 result = data.FirstOrDefault();
             }
 
-            var propertyList = _lotayaApiService.GetPropertyFeedList(result.access_token);
-            return propertyList;
-
-
-
-
-            //var propertyFeedModels = new List<PropertyFeedModel>();
-            //var model1 = new PropertyFeedModel();
-            //model1.Id = 123;
-            //model1.Title = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-            //model1.Image1 = "https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/29496520_1079882905487743_2733123361083044221_n.jpg?_nc_cat=0&oh=043b2ab85bd7b0ae248063644c3fc0d3&oe=5B29164E";
-            //model1.Message = "Hello Text";
-
-            //var model2 = new PropertyFeedModel();
-            //model2.Id = 456;
-            //model2.Title = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorumby Cicero, written in 45 BC.This book is a treatise on the theory of ethics, very popular during the Renaissance.The first line of Lorem Ipsum, comes from a line in section 1.10.32.";
-            //model2.Image1 = "https://scontent.xx.fbcdn.net/v/t1.0-0/p180x540/29468019_1039437996205170_6787169052151250944_n.jpg?oh=21a4233b213926f45535f28d584daf50&oe=5B75C1F0";
-            //model2.Message = "Hello Text 456";
-
-            //propertyFeedModels.Add(model1);
-            //propertyFeedModels.Add(model2);
-
-
-
-            return propertyFeedModels;
+            return result;
         }
 
         private string GetToken(string url, string userName, string password)
@@ -168,20 +147,7 @@ namespace LotayaPropertyApp
                 var content = new FormUrlEncodedContent(pairs);
                 ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
-                //WebClient webClient = new WebClient();
-
-
-                //using (var client = new HttpClient())
-                //{
-                //    var response = client.PostAsync(url + "Token", content).Result;
-
-                //    return response.Content.ReadAsStringAsync().Result;
-                //}
-
                 string userData = string.Format("username={0}&Password={1}&grant_type=password", userName, password);
-                //string encodedUserCredentials =
-                //    Convert.ToBase64String(
-                //        System.Text.ASCIIEncoding.ASCII.GetBytes("user:password"));
 
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url + "token"));
                 request.Accept = "application/json";
