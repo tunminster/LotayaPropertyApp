@@ -3,14 +3,19 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/checkedTextView1">
+    android:id="@+id/checkedTextView1"
+    android:layout_marginBottom="15dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:background="#ffffff">
     <ImageView
         android:src="@android:drawable/ic_menu_gallery"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/ivFeedImage" /> 
-  
-  
+        android:id="@+id/ivFeedImage"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
     <TextView
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"

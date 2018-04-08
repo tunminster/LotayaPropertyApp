@@ -24,6 +24,11 @@ namespace LotayaPropertyApp.Helpers
             get { return "http://lotayaapi.harveynetwork.com/api/propertyfeed"; }
         }
 
+        public static string PropertyFeedPagingApiUrl
+        {
+            get { return "http://lotayaapi.harveynetwork.com/api/propertyfeed/GetLatestProperties?skip={0}&take={1}"; }
+        }
+
         public static string ApiUsername
         {
             get { return "tminhein@gmail.com"; }

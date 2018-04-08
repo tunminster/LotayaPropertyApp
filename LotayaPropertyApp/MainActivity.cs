@@ -46,6 +46,9 @@ namespace LotayaPropertyApp
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
 
+            var metrics = Resources.DisplayMetrics;
+            
+
             lv = FindViewById<ListView>(Resource.Id.lv);
 
             propertyFeedModels = GetPropertyFeedModels();
@@ -59,7 +62,7 @@ namespace LotayaPropertyApp
             lv.AddFooterView(btnLoadMore);
 
 
-            adapter = new CustomAdapter(this, Resource.Layout.PropertyFeedModel, Resource.Id.tvTitle2, propertyFeedModels);
+            adapter = new CustomAdapter(this, Resource.Layout.PropertyFeedModel, Resource.Id.tvTitle2, propertyFeedModels, metrics.WidthPixels);
 
             lv.Adapter = adapter;
 
@@ -75,11 +78,13 @@ namespace LotayaPropertyApp
 
         private void BtnLoadMore_Click(object sender, EventArgs e)
         {
+            var metrics = Resources.DisplayMetrics;
+
             RunOnUiThread(() =>
             {
-                var result = GetPropertyFeedModels(maxPosition,20);
+                var result = GetPropertyFeedModels(maxPosition,10);
                 propertyFeedModels.AddRange(result);
-                adapter = new CustomAdapter(this, Resource.Layout.PropertyFeedModel, Resource.Id.tvTitle2, propertyFeedModels);
+                adapter = new CustomAdapter(this, Resource.Layout.PropertyFeedModel, Resource.Id.tvTitle2, propertyFeedModels, metrics.WidthPixels);
                 lv.Adapter = adapter;
 
                 int currentPosition = lv.FirstVisiblePosition;
@@ -99,101 +104,34 @@ namespace LotayaPropertyApp
         //Todo: get property by skip and take
         private List<PropertyFeedModel> GetPropertyFeedModels(int skip, int take)
         {
-            TokenModel result = GetToken();
-            return new List<PropertyFeedModel>();
+            var propertyList = _lotayaApiService.GetPropertyFeedList(skip, take);
+            return propertyList;
         }
 
 
         private List<PropertyFeedModel> GetPropertyFeedModels()
         {
-            TokenModel result = GetToken();
-
-            var propertyList = _lotayaApiService.GetPropertyFeedList(result.access_token);
+            var propertyList = _lotayaApiService.GetPropertyFeedList(0,10);
             return propertyList;
-
         }
 
-        private TokenModel GetToken()
-        {
-            var data = _db.GetList<TokenModel>();
-            var result = data.FirstOrDefault();
+        
 
-            if (result == null || result.expires < DateTime.Now || result.expires.Equals(DateTime.Now))
-            {
-                var token = GetToken(ConfigHelper.LotayaApiUrl, ConfigHelper.ApiUsername, ConfigHelper.ApiPassword);
-                TokenModel tokenModel;
+        //private Bitmap GetImageBitmapFromUrl(string url)
+        //{
+        //    Bitmap imageBitmap = null;
 
-                tokenModel = JsonConvert.DeserializeObject<TokenModel>(token);
-                _db.DeleteModel<TokenModel>();
-                _db.Insert(tokenModel);
+        //    using (var webClient = new WebClient())
+        //    {
+        //        var imageBytes = webClient.DownloadData(url);
+        //        if (imageBytes != null && imageBytes.Length > 0)
+        //        {
+        //            imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+        //        }
+        //    }
 
-                data = _db.GetList<TokenModel>();
-                result = data.FirstOrDefault();
-            }
-
-            return result;
-        }
-
-        private string GetToken(string url, string userName, string password)
-        {
-            try
-            {
-                var pairs = new List<KeyValuePair<string, string>>
-                    {
-                        new KeyValuePair<string, string>( "grant_type", "password" ),
-                        new KeyValuePair<string, string>( "username", userName ),
-                        new KeyValuePair<string, string> ( "Password", password )
-                    };
-                var content = new FormUrlEncodedContent(pairs);
-                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-
-                string userData = string.Format("username={0}&Password={1}&grant_type=password", userName, password);
-
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(new Uri(url + "token"));
-                request.Accept = "application/json";
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.Method = "POST";
-
-                using (var requestWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    requestWriter.Write(userData);
-                    requestWriter.Close();
-                }
-
-                using (WebResponse response = request.GetResponse())
-                {
-                    using (var sr = new StreamReader(response.GetResponseStream()))
-                    {
-                        string result = sr.ReadToEnd();
-
-                        return result;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                var test = ex.Message;
-            }
-
-            return string.Empty;
-
-        }
-
-        private Bitmap GetImageBitmapFromUrl(string url)
-        {
-            Bitmap imageBitmap = null;
-
-            using (var webClient = new WebClient())
-            {
-                var imageBytes = webClient.DownloadData(url);
-                if (imageBytes != null && imageBytes.Length > 0)
-                {
-                    imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
-                }
-            }
-
-            return imageBitmap;
-        }
+        //    return imageBitmap;
+        //}
     }
 }
 

@@ -126,6 +126,7 @@
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\ILotayaApiService.cs" />
     <Compile Include="Services\LotayaApiService.cs" />
+    <Compile Include="Services\ServiceBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\ZawgyiOne2008.ttf" />

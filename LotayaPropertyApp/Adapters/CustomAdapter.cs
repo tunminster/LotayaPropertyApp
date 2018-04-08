@@ -15,6 +15,7 @@ using Square.Picasso;
 using LotayaPropertyApp.Holders;
 using static Android.InputMethodServices.InputMethodService;
 
+
 namespace LotayaPropertyApp.Adapters
 {
     public class CustomAdapter : ArrayAdapter
@@ -23,12 +24,14 @@ namespace LotayaPropertyApp.Adapters
         private List<PropertyFeedModel> propertyFeeds;
         private int resource;
         private LayoutInflater inflater;
+        private int _deviceWidth;
 
-        public CustomAdapter(Context context, int resource, int textViewResourceId, List<PropertyFeedModel> objects) : base(context, resource, textViewResourceId, objects)
+        public CustomAdapter(Context context, int resource, int textViewResourceId, List<PropertyFeedModel> objects, int deviceWidth) : base(context, resource, textViewResourceId, objects)
         {
             this._context = context;
             this.resource = resource;
             this.propertyFeeds = objects;
+            this._deviceWidth = deviceWidth;
         }
 
         //public CustomAdapter(Context context, int resource, List<PropertyFeedModel> objects) : base(context, resource, objects)
@@ -71,8 +74,10 @@ namespace LotayaPropertyApp.Adapters
 
 
             //ImageService.Instance.LoadUrl(propertyFeeds[position].Image2).Into(holder.ivImage);
-
-            Picasso.With(Context).Load(propertyFeeds[position].Image1).Into(holder.ivImage);
+            //.Resize(600, 350)
+            Picasso.With(Context).Load(propertyFeeds[position].Image1)
+                .Resize(_deviceWidth - 10, 350)
+                .Into(holder.ivImage);
 
             convertView.SetBackgroundColor(Color.AliceBlue);
 
